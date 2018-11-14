@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft-deployment
+spec:
+  selector:
+    matchLabels:
+      app: minecraft
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: minecraft
+    spec:
+      containers:
+      - name: minecraft
+        image: openhack/minecraft-server
+        ports:
+          - containerPort: 25565
+        volumeMounts:
+        - name: volume
+          mountPath: /data/
+        env:
+          - name: EULA
+            value: "TRUE"
+      volumes:
+      - name: volume
+        persistentVolumeClaim:
+          claimName: azurefile
